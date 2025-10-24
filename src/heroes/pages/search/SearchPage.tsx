@@ -1,9 +1,22 @@
+import { CustomBreadcrumbs } from "@/components/custom/CustomBreadcrumbs";
 import { CustomJumbotron } from "@/components/custom/CustomJumbotron";
+import { HeroGrid } from "@/heroes/components/HeroGrid";
 import { HeroStats } from "../../components/HeroStats";
 import { SearchControl } from "./ui/SearchControl";
-import { CustomBreadcrumbs } from "@/components/custom/CustomBreadcrumbs";
+import { useAdvancedSearch } from "@/heroes/hooks/useAdvancedSearch";
+import { useSearchParams } from "react-router";
 
 export const SearchPage = () => {
+  const [searchParams] = useSearchParams();
+  const { data: heroes = [] } = useAdvancedSearch({
+    name: searchParams.get("name") ?? "",
+    strength: searchParams.get("strength") ?? "",
+    team: searchParams.get("team") ?? "",
+    category: searchParams.get("category") ?? "",
+    universe: searchParams.get("universe") ?? "",
+    status: searchParams.get("status") ?? "",
+  });
+
   return (
     <>
       <CustomJumbotron
@@ -18,6 +31,7 @@ export const SearchPage = () => {
       />
       <HeroStats />
       <SearchControl />
+      <HeroGrid heroes={heroes} />
     </>
   );
 };
